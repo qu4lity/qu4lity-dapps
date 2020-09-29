@@ -11,7 +11,7 @@ dell'identità da creare e firmare suddetta chiave mediante la propria chiave pr
 
 Il controller (e solo lui) avrà anche la possibilità di modificare lo stato di una identità sul ledger, i cui stati possono variare in Attiva, Sospesa o Revocata.
 
-La struttura dati che modella questa casistica è Identity che è composta di due parti: baseEntry e statusEntry. La prima contiene i dati fissi censiti nel momento del censimento. La seconda parte invece rappresenta lo stato dell'identità al momento della data specificata.
+La struttura dati che modella questa casistica è Identity che è composta di due parti: baseEntry e statusEntry.  
 
 
 Identity:
@@ -23,7 +23,7 @@ Identity {
 }
 ```
 
-Base Entry:
+Base Entry: contiene i dati fissi censiti nel momento del censimento.
 
 ```
 BaseEntry {
@@ -38,7 +38,7 @@ BaseEntry {
   
 ```
 
-Status Entry:
+Status Entry: rappresenta lo stato dell'identità al momento della data specificata.
 
 ```
 StatusEntry {
