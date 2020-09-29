@@ -46,22 +46,16 @@ gli ultimi (NAME e VERSION) rappresentano il nome logico dell’oggetto pubblica
 previsto, il suo numero progressivo di versione.
 
 MESSAGE_REF è un URL che individua l’oggetto pubblicato nell’area comune di memorizzazione, e
-
 permette di scaricarne una copia; MESSAGE_SIZE ne indica la dimensione. Notare che l’area di
-
 memorizzazione non è parte di SMB, e deve quindi essere gestita dagli utenti (incluso il controllo
-
 degli accessi, quando previsto).
 
 Il campo SEAL contiene un valore _hash_ calcolato sul contenuto dell’oggetto pubblicato: permette a
 chiunque abbia ricevuto l'oggetto di verificarne, applicando il medesimo algoritmo già utilizzato in
 fase di pubblicazione, la corrispondenza col contenuto originale.
 
-
 SIGNED_BY e CONFIDENTIAL_FOR dichiarano rispettivamente l’utente che ha firmato digitalmente
-
 l'oggetto e il suo destinatario confidenziale, se presenti. In entrambi i casi, l’URL individua un record,
-
 appartenente a una qualunque _public key infrastructure_ , che sancisce l’identità (e la relativa chiave
 pubblica) del soggetto in questione. Trattandosi di funzionalità avanzate, non sono descritte in
 
