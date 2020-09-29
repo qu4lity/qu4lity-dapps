@@ -16,30 +16,40 @@ La struttura dati che modella questa casistica è Identity che è composta di du
 
 Identity:
 
-
 ```
-Identity {	 BaseEntry	 StatusEntry
-             }
+Identity { 
+        BaseEntry,
+        StatusEntry
+       }
 ```
 
 
 
 Base Entry:
+
 ```
-BaseEntry {	Address	Created	CreatedBy	Controller	PKeyBlob 	KeyType   	Details                 }```
+BaseEntry {
+  Address,
+  Created,
+  CreatedBy,
+  Controller,
+  PKeyBlob,
+  KeyType,
+  Details
+  }```
 
 
 Status Entry:
 
 ```
-StatusEntry {          Address          SubAddress          ValidFrom          UpdatedBy         Status     }
+StatusEntry {
+  Address,
+  SubAddress,
+  ValidFrom,
+  UpdatedBy,
+  Status
+  }
 ```
-
-
-
-
-
-
 
 
 
