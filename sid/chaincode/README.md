@@ -20,7 +20,7 @@ Identity:
 Identity { 
         BaseEntry,
         StatusEntry
-       }
+}
 ```
 
 Base Entry:
@@ -34,7 +34,7 @@ BaseEntry {
   PKeyBlob,
   KeyType,
   Details
-  }
+}
   
 ```
 
@@ -47,7 +47,7 @@ StatusEntry {
   ValidFrom,
   UpdatedBy,
   Status
-  }
+}
   
 ```
 
