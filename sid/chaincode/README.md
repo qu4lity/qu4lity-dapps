@@ -23,8 +23,6 @@ Identity {
        }
 ```
 
-
-
 Base Entry:
 
 ```
@@ -36,8 +34,9 @@ BaseEntry {
   PKeyBlob,
   KeyType,
   Details
-  }```
-
+  }
+  
+```
 
 Status Entry:
 
@@ -49,6 +48,7 @@ StatusEntry {
   UpdatedBy,
   Status
   }
+  
 ```
 
 
