@@ -18,8 +18,8 @@ Identity:
 
 ```
 Identity { 
-        BaseEntry,
-        StatusEntry
+  BaseEntry,
+  StatusEntry
 }
 ```
 
