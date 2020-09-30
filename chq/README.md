@@ -2,7 +2,7 @@
 
 ## Introduzione e modello dati
 
-Quality Clearing House (QCH)  è un servizio generalizzato per la gestione della qualità negli scenari della catena di fornitura, supportato dall'infrastruttura QU4LITY Blockchain.  Consente un sistema comune di registrazione per un ecosistema di produzione in cui gli attori devono valutare continuamente la qualità delle materie prime, delle parti e dei prodotti finali e abbinare i risultati con gli standard contrattuali che possono cambiare frequentemente. Grazie alla tecnologia Blockchain, i records QCH sono sicuri e affidabili: sono immutabili nel tempo e non ripudiabili. I Data Storage e la logica di business vengono replicati su tutti i nodi, che sono gestiti allo stesso modo da tutti i partecipanti, in modo che non esista un unico "proprietario" del sistema che può introdurre pregiudizi nel processo.
+Quality Clearing House (QCH)  è un servizio generalizzato per la gestione della qualità negli scenari della catena di fornitura, supportato dall'infrastruttura QU4LITY Blockchain.  Consente un sistema comune di registrazione per un ecosistema di produzione in cui gli attori devono valutare continuamente la qualità delle materie prime, delle parti e dei prodotti finali e abbinare i risultati con gli standard contrattuali che possono cambiare frequentemente. Grazie alla tecnologia Blockchain, i records QCH sono sicuri e affidabili: sono immutabili nel tempo e non ripudiabili. I Data Storage e la logica di business vengono replicati su tutti i nodi, che sono gestiti allo stesso modo da tutti i partecipanti, in modo che non esista un unico "proprietario" del sistema che può introdurre pregiudizi nel processo.
 
 I processi della Supply Chain supportati da QCH seguono un modello semplice, il cui flusso di lavoro è descritto di seguito. Per semplificare il modello e per semplicità, abbiamo indicato distinti attori che interpretano i tre ruoli incarnati nel sistema (Quality Master, Producer, Quality Assessor). Tuttavia, nei processi della supply chain del mondo reale è probabile che più organizzazioni svolgano il ruolo di fornitore e/o che una singola organizzazione svolga i ruoli rimanenti.
 Tutti i record sono strutturati in modo da avere un proprio identificatore univoco, che viene utilizzato internamente per il riferimento incrociato e sono di proprietà dell'entità che li crea.
@@ -23,7 +23,8 @@ I modelli che li rappresentano sono i seguenti:
 ```public class Shipment {
     private UUID id;
     private UUID model;
-    private List<Item> items;    }
+    private List<Item> items;
+    }
 ```
 
 ### Rilevazione delle misurazioni per ogni elemento ricevuto (parte di un lotto)- Quality Assessment (QA)
