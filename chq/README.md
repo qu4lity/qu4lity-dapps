@@ -76,8 +76,8 @@ E' prevista la scrittura di un record di QualityAssessement per un insieme di og
 
 Questi record sono collegati in questo modo:
 
-Ad 1 QualityModel corrispondono n QualityAssessment a lui collegati, uno per ogni oggettp fisico per cui si possano fare le misurazioni descritte.
-Ad 1 QualityModel corrispondono n Shipment, uno per ogni lotto spedito con al suo interno un certo numero di oggetti omogenei.
+Ad un QualityModel corrispondono n QualityAssessment a lui collegati, uno per ogni oggettp fisico per cui si possano fare le misurazioni descritte.
+Ad un QualityModel corrispondono n Shipment, uno per ogni lotto spedito con al suo interno un certo numero di oggetti omogenei.
 
 ## Subject
 
