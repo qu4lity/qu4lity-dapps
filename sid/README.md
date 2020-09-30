@@ -55,7 +55,7 @@ StatusEntry {
 
 ### Operazioni
 
-L'applicazione SID è composta da due soluzioni software lato client, e uno *smart contract* Blockchain. Il primo applicativo  client offre un interfaccia interettiva a linea di comando (*sid-command-line*) con la quale viene gestito il wallet personale dell utente. Con esso sarà possibile creare, visualizzare ed accedere alle proprie identità.  Il secondo applicativo (*sid-rest-api)* offre invece un intereffaccia visualizzabile sull indirizzo ***http://localhost:8080/swagger-ui.html***. Tale intefaccia espone alcune API per interagire con le funzionalità dello *smartcontract*. 
+L'applicazione SID è composta da due soluzioni software lato client, e uno *smart contract* Blockchain. Il primo applicativo  client offre un interfaccia interettiva a linea di comando (*sid-command-line*) con la quale viene gestito il wallet personale dell'utente. Con esso è possibile creare, visualizzare ed accedere alle proprie identità. Il secondo applicativo (*sid-rest-api)* offre invece un'interfaccia visualizzabile sull indirizzo ***http://localhost:8080/swagger-ui.html***. Tale intefaccia espone alcune API per interagire con le funzionalità dello *smartcontract*. 
 ### Installazione del client
 
 **Requisiti di sistema**
@@ -66,8 +66,8 @@ L'applicazione SID è composta da due soluzioni software lato client, e uno *sma
 
 **Installazione**
 
-Una volta clonato i due progetti client in locale, è possibili tramite il comando da terminale (su ciascuna root dei due progettI)	***mvn install***   generare i due JAR.
-Entrambi i JAR utilizzano le credenziali di  Fabric per connettersi alla Blockchain. Tali credenziali sono incampsulate all interno di una cartella, denominata Wallet, che è possibile generare seguendo la guida ufficiale a questo  [link](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#first-the-application-enrolls-the-admin-user) link per creare tale cartella con le credenziali di Fabric. Una volta creata la cartella Wallet può essere salvata in qualsisi punto ma e il suo percorso andrà settato come variabile di ambiente del proprio sistema operativo (se non viene creata tale variabile di ambiente i due JAR cercheranno tali configurazioni all interno home utente).
+Una volta clonato i due progetti client in locale, è possibili tramite il comando da terminale (su ciascuna root dei due progetti): ***mvn install*** generare i due JAR.
+Entrambi i JAR utilizzano le credenziali di Fabric per connettersi alla Blockchain. Tali credenziali sono incapsulate all'interno di una cartella, denominata Wallet, che è possibile generare seguendo la guida ufficiale a questo link [link](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#first-the-application-enrolls-the-admin-user) per creare tale cartella con le credenziali di Fabric. Una volta creata la cartella Wallet può essere salvata in qualsisi punto ma e il suo percorso deve essere inserito come valore di una variabile di ambiente del sistema operativo (se non viene creata tale variabile di ambiente i due JAR cercheranno tali configurazioni all'interno della home dell'utente).
 
 #### sid-command-line
 
@@ -102,11 +102,11 @@ L'applicativo esponde tre API, Post, Get e Put:
  **POST** 
  Permette di censire da parte di un utente *controller* una nuova identità.
 
-I paremetri richiesti sono:
+I parametri richiesti sono:
 
 - **ctrlAddr** : address del controller scelto tra quelli presenti nel proprio wallet
-- **password** : password per  decodificare il proprio wallet
-- **pubKey** : Publickey in formato Base64 appartenente al nuovo  utente da censire 
+- **password** : password per accedere al proprio wallet
+- **pubKey**   : Publickey in formato Base64 relativa al nuovo utente da censire 
 	
 		Request URL: 
 		http://localhost:8080/identity/?ctrlAddr%20=addressController&password=password&pubKey=public ke
@@ -126,7 +126,10 @@ L'unico paramentro richiesto è l'address di una identity presente ed attiva sul
 	Request URL: http://localhost:8080/identity/address
 
 **PUT**
-Permette di modificare lo stato di una identity presente sul ledger. Ci sono tre operazioni possibile : **revoke** in grado di revocare MASSI TODO operazioni revoke activare e suspend
+Permette di modificare lo stato di una identity presente sul ledger. Ci sono tre operazioni possibili: 
+**activate** in grado di attivare una identità che non lo è.
+**suspend** in grado di sospendere una identità in modo temporaneo, infatti può essere riattivata mediante l'apposita operazione di activate in un qualunque momento.
+**revoke** in grado di revocare una utenza in modo definitivo, infatti una utenza revocata non può più essere riattivata.
 
 I parametri richiesti sono:
 
