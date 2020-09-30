@@ -124,7 +124,7 @@ Permette di recuperare le informazioni principale di una identity attiva. Se l'o
 L'unico paramentro richiesto è l'address di una identity presente ed attiva sul ledger.
 
 	Request URL: http://localhost:8080/identity/address
-<br />
+
 **PUT**
 Permette di modificare lo stato di una identity presente sul ledger. Ci sono tre operazioni possibili:<br />
 
