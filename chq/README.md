@@ -10,7 +10,8 @@ I modelli che li rappresentano sono i seguenti:
 
 ### Piano di qualità per ogni tipologia di prodotto - Quality Model
 
-```public class QualityModel {
+```
+public class QualityModel {
     private UUID id;
     private Integer  version;
     private URL      contract;
@@ -20,7 +21,8 @@ I modelli che li rappresentano sono i seguenti:
 
 ### Lotto di prodotti omogenei - Shipping Unit Manifest
 
-```public class Shipment {
+```
+public class Shipment {
     private UUID id;
     private UUID model;
     private List<Item> items;
@@ -29,7 +31,8 @@ I modelli che li rappresentano sono i seguenti:
 
 ### Rilevazione delle misurazioni per ogni elemento ricevuto (parte di un lotto)- Quality Assessment (QA)
 
-```public class QualityAssessment {
+```
+public class QualityAssessment {
     private UUID id;
     private UUID shipment;
     private List<ItemAssessment> itemsAssessment;
@@ -38,14 +41,16 @@ I modelli che li rappresentano sono i seguenti:
 
 ### Item
 
-```public class Item {
+```
+public class Item {
     private String id;
 }
 ```
 
 ### Parametri di qualità (range) - QualityParameter
 
-```public class QualityParameter {
+```
+public class QualityParameter {
     private String contractPath;
     private Double minVal;
     private Double maxVal;
@@ -54,7 +59,8 @@ I modelli che li rappresentano sono i seguenti:
 
 ### Misurazioni Effettive - ItemAssessment
 
-```public class ItemAssessment {
+```
+public class ItemAssessment {
     private String       id;
     private List<Double> values;
 }
