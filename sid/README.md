@@ -126,10 +126,11 @@ L'unico paramentro richiesto è l'address di una identity presente ed attiva sul
 	Request URL: http://localhost:8080/identity/address
 
 **PUT**
-Permette di modificare lo stato di una identity presente sul ledger. Ci sono tre operazioni possibili: 
-**activate** in grado di attivare una identità che non lo è.
-**suspend** in grado di sospendere una identità in modo temporaneo, infatti può essere riattivata mediante l'apposita operazione di activate in un qualunque momento.
-**revoke** in grado di revocare una utenza in modo definitivo, infatti una utenza revocata non può più essere riattivata.
+Permette di modificare lo stato di una identity presente sul ledger. Ci sono tre operazioni possibili:<br />
+
+**activate** in grado di attivare una identità che non lo è.<br />
+**suspend** in grado di sospendere una identità in modo temporaneo, infatti può essere riattivata mediante l'apposita operazione di activate in un qualunque momento.<br />
+**revoke** in grado di revocare una utenza in modo definitivo, infatti una utenza revocata non può più essere riattivata.<br />
 
 I parametri richiesti sono:
 
