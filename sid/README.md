@@ -1,18 +1,16 @@
 # SID
 
-## Introduzione e modello dati
+## Introduction and data model
 
-Identity è una applicazione per la creazione e la gestione di identità digitali, registrate utilizzando una tecnologia Blockchain, collegate da un processo di validazione da parte di identità già censite, facendo uso di un processo di autenticazione attraverso una firma digitale. 
-Una identità digitale è intesa come una identità dotata di un sistema di crittografia a chiave asimmetrica, con una chiave pubblica e una chiave privata.
+Identity is an application for the creation and management of digital identities, registered using a Blockchain technology, connected by a validation process managed by identities already registered, making use of an authentication process through a digital signature.
 
-Il meccanismo prevede che venga inserita una (o più) identità Root (controller di se stessa) che poi possa fare da Controller e in questo modo garantisca per le nuove identità create. Ogni identità creata potrà a sua volta essere controller di una nuova identità fino ad un massimo di 5 gradi di separazione.
+A digital identity is understood as an identity with an asymmetric key encryption system, with a public key and a private key.The mechanism provides that one (or more) Root identity (controller of itself) is inserted which can then act as Controller and in this way guarantees for the new identities created. Each identity created can in turn be the controller of a new identity up to a maximum of 5 degrees of separation.
 
-Per la creazione di una identità, il Controller dovrà aver ricevuto la public Key 
-dell'identità da creare e firmare suddetta chiave mediante la propria chiave privata, per certificare la propria identità. Lo smartcontract verificherà mediante la chiave pubblica del controller la firma apposta sui dati della nuova identità da inserire e solo se tutti i controlli vanno a buon fine, verrà fatto un inserimento sul Ledger del nuovo record che identifica la nuova identità.
+For the creation of an identity, the Controller must have received the public Key of the identity to be created and sign the aforementioned key using its private key, to certify its identity. The smartcontract will verify through the public key of the controller the signature affixed to the data of the new identity to be entered and only if all the checks are successful, an insertion will be made on the Ledger of the new record that identifies the new identity.
 
-Il controller (e solo lui) avrà anche la possibilità di modificare lo stato di una identità sul ledger, i cui stati possono variare in Attiva, Sospesa o Revocata.
+The controller (and only him) will also have the ability to change the status of an identity on the ledger, whose statuses can change to Active, Suspended or Revoked.
 
-La struttura dati che modella questa casistica è Identity che è composta di due parti: baseEntry e statusEntry.  
+The data structure that models this case is Identity which is composed of two parts: baseEntry and statusEntry.
 
 
 Identity:
@@ -24,7 +22,7 @@ Identity {
 }
 ```
 
-Base Entry: contiene i dati fissi censiti nel momento del censimento.
+Base Entry: it contains the fixed data recorded at the time of the census.
 
 ```
 BaseEntry {
@@ -39,7 +37,7 @@ BaseEntry {
   
 ```
 
-Status Entry: rappresenta lo stato dell'identità al momento della data specificata.
+Status Entry:represents the state of the identity at the time of the specified date.
 
 ```
 StatusEntry {
@@ -53,33 +51,33 @@ StatusEntry {
 ```
 
 
-### Operazioni
+### Operations
 
-L'applicazione SID è composta da due soluzioni software lato client, e uno *smart contract* Blockchain. Il primo applicativo  client offre un interfaccia interettiva a linea di comando (*sid-command-line*) con la quale viene gestito il wallet personale dell'utente. Con esso è possibile creare, visualizzare ed accedere alle proprie identità. Il secondo applicativo (*sid-rest-api)* offre invece un'interfaccia visualizzabile sull indirizzo ***http://localhost:8080/swagger-ui.html***. Tale intefaccia espone alcune API per interagire con le funzionalità dello *smartcontract*. 
-### Installazione del client
+The SID application consists of two client-side software solutions, and a *smart contract* Blockchain. The first client application offers an interactive command line interface (*sid-command-line*) with which the user's personal wallet is managed. With it you can create, view and access your identities. The second application (*sid-rest-api*) instead offers an interface that can be viewed on the address ***http://localhost:8080/swagger-ui.html***. This interface exposes some APIs to interact with the functionality of the *smartcontract*.
 
-**Requisiti di sistema**
+### Client Installation
 
-- Java JRE 1.8 o superiore
-- Apache Maven 3.6.3 o superiore
-- Connessione a Internet priva di proxy
+**System requirements**
 
-**Installazione**
+- Java JRE 1.8 or higher
+- Apache Maven 3.6.3 or higher
+- Internet Connection without Proxy
 
-Una volta clonato i due progetti client in locale, è possibili tramite il comando da terminale (su ciascuna root dei due progetti): ***mvn install*** generare i due JAR.
-Entrambi i JAR utilizzano le credenziali di Fabric per connettersi alla Blockchain. Tali credenziali sono incapsulate all'interno di una cartella, denominata Wallet, che è possibile generare seguendo la guida ufficiale a questo link [link](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#first-the-application-enrolls-the-admin-user) per creare tale cartella con le credenziali di Fabric. Una volta creata la cartella Wallet può essere salvata in qualsisi punto ma e il suo percorso deve essere inserito come valore di una variabile di ambiente del sistema operativo (se non viene creata tale variabile di ambiente i due JAR cercheranno tali configurazioni all'interno della home dell'utente).
+**Installation**
+
+After cloning the two client projects locally, it is possible through the terminal command (on each root of the two projects): ***mvn install*** to generate the two JARs.
+Both JARs use Fabric credentials to connect to the Blockchain. These credentials are encapsulated inside a folder, called Wallet, which can be generated by following the official guide at this link [link](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#first-the-application-enrolls-the-admin-user) to create that folder with Fabric credentials. After the Wallet folder has been created, it can be saved anywhere but its path must be entered as the value of an environment variable of the operating system (if this environment variable is not created, the two JARs will search for these configurations in the home of the user).
 
 #### sid-command-line
 
+The client is not interactive: to perform a single operation, it must be launched from the system shell with a specific command. The command is structured as follows (assuming that the Java JRE has been configured correctly):
 
-Il client non è interattivo: per eseguire una singola operazione, deve essere lanciato dalla shell di sistema con un comando specifico. Il comando è così strutturato (si assume che il Java JRE sia stato configurato correttamente):
+	java - jar <path to the executable file>_
 	
-	java - jar <percorso del file eseguibile>_
-	
-	- c <comando: list, stat, gen , show> (obbligatorio)
-	- p <password: password per cifrare/decifrare il proprio wallet> (obbligatorio)
-	- a <address: address della identity che vogliamo visualizzare, obbligatorio insieme al comando SHOW> 
-	- h  <HELP: lista dei comandi> (opzionale)
+	- c <command: list, stat, gen , show> (mandatory)
+	- p <password: password of your wallet> (mandatory)
+	- a <address: address Key of identity that we want to display, mandatory together with the command SHOW> 
+	- h  <HELP: Commands list> (optional)
 	
 Esempi:
 
@@ -97,23 +95,25 @@ Esempi:
 
 ***
 
-L'applicativo esponde tre API, Post, Get e Put:
+The application expects three API: Post, Get e Put:
 
  **POST** 
- Permette di censire da parte di un utente *controller* una nuova identità.
+It allows a *controller* user to register a new identity.
 
-I parametri richiesti sono:
+The required parameters are:
 
-- **ctrlAddr** : address del controller scelto tra quelli presenti nel proprio wallet
-- **password** : password per accedere al proprio wallet
-- **pubKey**   : Publickey in formato Base64 relativa al nuovo utente da censire 
+- **ctrlAddr** : address of controller chosen from those present in your wallet
+- **password** : password to access your wallet
+- **pubKey**   : Publickey in Base64 format for the new user to be registered
 	
 		Request URL: 
-		http://localhost:8080/identity/?ctrlAddr%20=addressController&password=password&pubKey=public ke
+		http://localhost:8080/identity/?ctrlAddr%20=addressController&password=password&pubKey=public
 
 **GET** 
-Permette di recuperare le informazioni principale di una identity attiva. Se l'operazione termina con successo viene restituita la seguente struttura dati:
 
+It allows you to retrieve the main information of an active identity. If the operation ends successfully, the following data structure is returned:
+
+```
 	SID {
 		address	string
 		controller	string
@@ -121,26 +121,39 @@ Permette di recuperare le informazioni principale di una identity attiva. Se l'o
 		pubKey	string
 		status	integer($int32)
 	  }
-L'unico paramentro richiesto è l'address di una identity presente ed attiva sul ledger.
+```
+
+The only parameter required is the address of an identity present and active on the ledger.
 
 	Request URL: http://localhost:8080/identity/address
 
 **PUT**
-Permette di modificare lo stato di una identity presente sul ledger. Ci sono tre operazioni possibili:<br />
+It allows you to change the status of an identity present on the ledger. There are three possible operations:<br />
 
-- **activate** in grado di attivare una identità che non ha stato attivo.<br />
-- **suspend** in grado di sospendere una identità in modo temporaneo, può essere riattivata mediante l'apposita operazione di activate in un qualunque momento.<br />
-- **revoke** in grado di revocare una utenza in modo definitivo, una utenza revocata non può più essere riattivata.<br />
+- **activate** able to activate an identity that has no active status.<br />
+- **suspend** able to temporarily suspend an identity, it can be reactivated by means of the appropriate activate operation at any time.<br />
+- **revoke** able to revoke a user permanently, a revoked user can no longer be reactivated.<br />
 
-I parametri richiesti sono:
+The required parameters are:
 
-- **addr**: address delle identity al quale apportare un cambio di stato.
-- **ctrlAddr** : address del controller scelto tra quelli presenti nel proprio wallet, e effettivamente controllore delle identiy da modificare.
-- **op** : nome operazione  tra revoke, activate, suspend .
-- **password** : password per  decodificare il proprio wallet.
+- **addr**: address of the identities to which to make a change of state.
+- **ctrlAddr** : address of the controller address controller chosen from those present in your wallet, and actually controller of the identities to be modified.
+- **op** : operation name between revoke, activate, suspend.
+- **password** : password to decrypt your wallet.
 	
 	
 		Request URL http://localhost:8080/identity/address/revoke?ctrlAddr=controllerAddress&password=password
 
-#### Codici di risposta
- todo
+## Chaincode
+
+### Installation
+
+#### Prerequisites
+
+* Linux Environment.
+* Administrative access to the machine.
+* Access to Internet.
+* Install **Hyperledger Fabric version 1.4** following this installation [guide](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#).
+* Clone the repository.: `git clone https://github.com/Engineering-Research-and-Development/qu4lity-dapps.git`
+* Copy the `chaincode` folder of SID project under your HLF installation machine.
+* To install the chaincode follow the instructions given in the following guide: [guide](https://hyperledger-fabric.readthedocs.io/en/release-1.4/chaincode4noah.html#installing-chaincode#)

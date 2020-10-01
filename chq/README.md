@@ -98,23 +98,7 @@ Quality Assessor reads the Shipment records from the Ledger, reads the model key
 * Linux Environment.
 * Administrative access to the machine.
 * Access to Internet.
-* Install **Hyperledger Fabric version 1.4** following this installation [guide](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#).
+* Install **Hyperledger Fabric version 1.4** following this installation [guide](https://hyperledger-fabric.readthedocs.io/en/release-1.4/build_network.html#building-your-first-network).
 * Clone the repository.: `git clone https://github.com/Engineering-Research-and-Development/qu4lity-dapps.git`
 * Copy the `chaincode` folder of CHQ project under your HLF installation machine.
-* Use these commands to install and instantiate the chaincode:
-
-```
-$ docker exec -it cli bash
-$ cd .. && cd chaincode
-$ peer chaincode install -p sss-chaincode -n Qu4lityContract.java -v 1.0 -l java
-$ peer chaincode instantiate -n Qu4lityContract.java -c '{"Args":["a","10"]}' -C mychannel -v 1.0 -l java
-```
-
-At every modification of the chaincode , you must use a upgrade command, after incrementing the version by one:
-```
-$ docker exec -it cli bash
-$ cd .. && cd chaincode
-$ peer chaincode install -p sss-chaincode -n Qu4lityContract.java -v 1.1 -l java
-$ peer chaincode upgrade -n Qu4lityContract.java -c '{"Args":["a","10"]}' -C mychannel -v 1.1 -l java
-```
-
+* To install the chaincode follow the instructions given in the following guide: [guide](https://hyperledger-fabric.readthedocs.io/en/release-1.4/chaincode4noah.html#installing-chaincode)
