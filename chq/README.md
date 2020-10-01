@@ -2,7 +2,7 @@
 
 ## Introduzione e modello dati
 
-Quality Clearing House (QCH)  è un servizio generalizzato per la gestione della qualità negli scenari della catena di fornitura, supportato dall'infrastruttura QU4LITY Blockchain.  Consente un sistema comune di registrazione per un ecosistema di produzione in cui gli attori devono valutare continuamente la qualità delle materie prime, delle parti e dei prodotti finali e abbinare i risultati con gli standard contrattuali che possono cambiare frequentemente. Grazie alla tecnologia Blockchain, i records QCH sono sicuri e affidabili: sono immutabili nel tempo e non ripudiabili. I Data Storage e la logica di business vengono replicati su tutti i nodi, che sono gestiti allo stesso modo da tutti i partecipanti, in modo che non esista un unico "proprietario" del sistema che può introdurre pregiudizi nel processo.
+Quality Clearing House (CHQ)  è un servizio generalizzato per la gestione della qualità negli scenari della catena di fornitura, supportato dall'infrastruttura QU4LITY Blockchain.  Consente un sistema comune di registrazione per un ecosistema di produzione in cui gli attori devono valutare continuamente la qualità delle materie prime, delle parti e dei prodotti finali e abbinare i risultati con gli standard contrattuali che possono cambiare frequentemente. Grazie alla tecnologia Blockchain, i records CHQ sono sicuri e affidabili: sono immutabili nel tempo e non ripudiabili. I Data Storage e la logica di business vengono replicati su tutti i nodi, che sono gestiti allo stesso modo da tutti i partecipanti, in modo che non esista un unico "proprietario" del sistema che può introdurre pregiudizi nel processo.
 
 I processi della Supply Chain supportati da QCH seguono un modello semplice, il cui flusso di lavoro è descritto di seguito. Per semplificare il modello e per semplicità, abbiamo indicato distinti attori che interpretano i tre ruoli incarnati nel sistema (Quality Master, Producer, Quality Assessor). Tuttavia, nei processi della supply chain del mondo reale è probabile che più organizzazioni svolgano il ruolo di fornitore e/o che una singola organizzazione svolga i ruoli rimanenti.
 Tutti i record sono strutturati in modo da avere un proprio identificatore univoco, che viene utilizzato internamente per il riferimento incrociato e sono di proprietà dell'entità che li crea.
@@ -84,3 +84,30 @@ Ad un QualityModel corrispondono n Shipment, uno per ogni lotto spedito con al s
 Quality Master: produce i record di tipo QualityModel e provvede al loro inserimento sul Ledger
 Producer: produce i record di tipo Shipment e provvede alla loro registrazione sul Ledger
 Quality Assessor legge dal Ledger i record Shipment, legge la chiave del modello che gli corrisponde e legge i record di tipo QualityModel, dopocichè effettua effettivamente le misurazioni secondo quelli che sono i dati scritti sul piano di qualità e produce un record di tipo QualityAssessment che verrà anch'esso registrato sul ledger.
+
+## Chaincode
+
+### Installation
+#### Prerequisites
+* Linux Environment.
+* Administrative access to the machine.
+* Access to Internet.
+* Install **Hyperledger Fabric version 1.4** following this installation [guide](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#).
+* Clone the repository.: `git clone https://github.com/Engineering-Research-and-Development/qu4lity-dapps.git`
+* Copy the `chaincode` folder of CHQ project under your HLF installation machine.
+* Use these commands to install and instantiate the chaincode: 
+```
+$ docker exec -it cli bash
+$ cd .. && cd chaincode
+$ peer chaincode install -p sss-chaincode -n Qu4lityContract.java -v 1.0 -l java
+$ peer chaincode instantiate -n Qu4lityContract.java -c '{"Args":["a","10"]}' -C mychannel -v 1.0 -l java
+```
+
+At every modification of the chaincode , you must use a upgrade command, after incrementing the version by one:
+```
+$ docker exec -it cli bash
+$ cd .. && cd chaincode
+$ peer chaincode install -p sss-chaincode -n Qu4lityContract.java -v 1.1 -l java
+$ peer chaincode upgrade -n Qu4lityContract.java -c '{"Args":["a","10"]}' -C mychannel -v 1.1 -l java
+```
+
