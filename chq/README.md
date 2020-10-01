@@ -2,13 +2,17 @@
 
 ## Introduzione e modello dati
 
-Quality Clearing House (CHQ)  è un servizio generalizzato per la gestione della qualità negli scenari della catena di fornitura, supportato dall'infrastruttura QU4LITY Blockchain.  Consente un sistema comune di registrazione per un ecosistema di produzione in cui gli attori devono valutare continuamente la qualità delle materie prime, delle parti e dei prodotti finali e abbinare i risultati con gli standard contrattuali che possono cambiare frequentemente. Grazie alla tecnologia Blockchain, i records CHQ sono sicuri e affidabili: sono immutabili nel tempo e non ripudiabili. I Data Storage e la logica di business vengono replicati su tutti i nodi, che sono gestiti allo stesso modo da tutti i partecipanti, in modo che non esista un unico "proprietario" del sistema che può introdurre pregiudizi nel processo.
+Quality Clearing House (CHQ)  is a generalized service for quality management in supply chain scenarios, supported by the infrastructure QU4LITY Blockchain.  Enable a common registration system for a manufacturing ecosystem in which actors must continuously evaluate the quality of raw materials, parts and final products and match results with contractual standards that can change frequently. 
+Thanks to Blockchain technology, CHQ records are safe and reliable: they are immutable over time and cannot be repudiated. 
+Data Storage and business logic are replicated across all nodes, which are managed equally by all participants, so that there is no single "owner" of the system that can introduce bias into the process.
 
-I processi della Supply Chain supportati da QCH seguono un modello semplice, il cui flusso di lavoro è descritto di seguito. Per semplificare il modello e per semplicità, abbiamo indicato distinti attori che interpretano i tre ruoli incarnati nel sistema (Quality Master, Producer, Quality Assessor). Tuttavia, nei processi della supply chain del mondo reale è probabile che più organizzazioni svolgano il ruolo di fornitore e/o che una singola organizzazione svolga i ruoli rimanenti.
-Tutti i record sono strutturati in modo da avere un proprio identificatore univoco, che viene utilizzato internamente per il riferimento incrociato e sono di proprietà dell'entità che li crea.
-I modelli che li rappresentano sono i seguenti:
+The Supply Chain processes supported by CQH follow a simple model, the workflow of which is described below. To simplify the model and for simplicity, we have indicated distinct actors who play the three roles embodied in the system (Quality Master, Producer, Quality Assessor). However, in real-world supply chain processes, multiple organizations are likely to play the supplier role and / or a single organization to play the remaining roles.
 
-### Piano di qualità per ogni tipologia di prodotto - Quality Model
+All records are structured to have their own unique identifier, which is used internally for cross-referencing and are owned by the entity that creates them.
+
+The models that represent them are the following:
+
+### Quality plan for each type of product - Quality Model
 
 ```
 public class QualityModel {
@@ -19,7 +23,7 @@ public class QualityModel {
     }
 ```
 
-### Lotto di prodotti omogenei - Shipping Unit Manifest
+### Lot of homogeneous products - Shipping Unit Manifest
 
 ```
 public class Shipment {
@@ -29,7 +33,7 @@ public class Shipment {
     }
 ```
 
-### Rilevazione delle misurazioni per ogni elemento ricevuto (parte di un lotto)- Quality Assessment (QA)
+### Taking measurements for each item received (part of a lot)- Quality Assessment (QA)
 
 ```
 public class QualityAssessment {
@@ -47,7 +51,7 @@ public class Item {
 }
 ```
 
-### Parametri di qualità (range) - QualityParameter
+### Quality parameters (range) - QualityParameter
 
 ```
 public class QualityParameter {
@@ -57,7 +61,7 @@ public class QualityParameter {
 }
 ```
 
-### Misurazioni Effettive - ItemAssessment
+### Actual Measurements - ItemAssessment
 
 ```
 public class ItemAssessment {
@@ -68,34 +72,37 @@ public class ItemAssessment {
 
 ## Operation
 
-E' prevista la scrittura di un record di QualityModel per ogni codice prodotto, al suo interno è presente una lista di misure (QualityParameter) da rispettare affinchè venga rispettato il piano di qualità.
+A QualityModel record is written for each product code, inside there is a list of measures (QualityParameter) to be respected in order to respect the quality plan.
 
-E' prevista la scrittura di un record di Shipment per ogni lotto di spedizione composto solo da oggetti omogenei per tipologia di prodotto (potrebbe essere un pancale di oggetti ad esempio).
+It is foreseen the writing of a Shipment record for each shipment lot composed only of homogeneous objects by type of product (it could be a pallet of objects for example).
 
-E' prevista la scrittura di un record di QualityAssessement per un insieme di oggetti, ognuno dei quali con le sue misurazioni effettive, è presente anche un riferimento al QualityModel (attraverso il collegamento con Shipment) e le misurazioni registrate sono esattamente quelle che corrispondono al QualityModel collegato, che descrive anche la tipologia di prodotto a cui ogni signolo oggetto appartiene.
+It is foreseen the writing of a QualityAssessement record for a set of objects, each of which with its actual measurements, there is also a reference to the QualityModel (through the connection with Shipment) and the recorded measurements are exactly those that correspond to the QualityModel connected, which also describes the type of product to which each individual object belongs.
 
-Questi record sono collegati in questo modo:
+These records are linked like this:
 
-Ad un QualityModel corrispondono n QualityAssessment a lui collegati, uno per ogni oggettp fisico per cui si possano fare le misurazioni descritte.
-Ad un QualityModel corrispondono n Shipment, uno per ogni lotto spedito con al suo interno un certo numero di oggetti omogenei.
+To a QualityModel correspond n QualityAssessments connected to it, one for each physical object for which the described measurements can be made.
+A QualityModel corresponds to n Shipment, one for each lot shipped with a certain number of homogeneous objects inside.
 
 ## Subject
 
-Quality Master: produce i record di tipo QualityModel e provvede al loro inserimento sul Ledger
-Producer: produce i record di tipo Shipment e provvede alla loro registrazione sul Ledger
-Quality Assessor legge dal Ledger i record Shipment, legge la chiave del modello che gli corrisponde e legge i record di tipo QualityModel, dopocichè effettua effettivamente le misurazioni secondo quelli che sono i dati scritti sul piano di qualità e produce un record di tipo QualityAssessment che verrà anch'esso registrato sul ledger.
+Quality Master: it produces the QualityModel type records and inserts them on the Ledger
+Producer: produces the Shipment records and records them on the Ledger
+Quality Assessor reads the Shipment records from the Ledger, reads the model key that corresponds to it and reads the QualityModel type records, after which it actually carries out the measurements according to the data written on the quality plan and produces a QualityAssessment record which will also it registered on the ledger.
 
 ## Chaincode
 
 ### Installation
+
 #### Prerequisites
+
 * Linux Environment.
 * Administrative access to the machine.
 * Access to Internet.
 * Install **Hyperledger Fabric version 1.4** following this installation [guide](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#).
 * Clone the repository.: `git clone https://github.com/Engineering-Research-and-Development/qu4lity-dapps.git`
 * Copy the `chaincode` folder of CHQ project under your HLF installation machine.
-* Use these commands to install and instantiate the chaincode: 
+* Use these commands to install and instantiate the chaincode:
+
 ```
 $ docker exec -it cli bash
 $ cd .. && cd chaincode
