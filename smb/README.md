@@ -1,170 +1,167 @@
 # Secure Messaging Board - v1.0
 
-## Introduzione e modello dati
+## Introduction and data model
 
-Secure Messaging Board (SMB) è un’applicazione per la _notarizzazione_ di contenuti digitali –
-tipicamente, ma non esclusivamente: messaggi, oggetti software, media - che vengono pubblicati da
-un autore e indirizzati a una lista di distribuzione o a un destinatario specifico. SMB implementa,
-utilizzando la tecnologia Blockchain, un processo di sicurezza che permette di memorizzare un
-contenuto in un’area condivisa (per es. cloud storage), pubblicando simultaneamente su Blockchain
-un record che ne annuncia l’esistenza, fornisce un puntatore per accedervi online e imposta un
-“sigillo digitale” a garanzia della sua provenienza e integrità. La struttura del record è la seguente:
+Secure Messaging Board (SMB) is an application for the _notarization_ of digital content -
+typically, but not exclusively: messages, software objects, media - which are published by
+an author and directed to a distribution list or specific recipient. SMB implements,
+using Blockchain technology, a security process that allows you to store a
+contained in a shared area (e.g. cloud storage), publishing simultaneously on the Blockchain
+a record that announces its existence, provides a pointer to access it online and sets a
+"Digital seal" to guarantee its origin and integrity. 
+The structure of the record is as follows:
 
 ```
-DOMAIN chiave opz. stringa Canale di distribuzione: dominio
+DOMAIN key optional string Distribution channel: domain
 ```
 ```
-ENVIRONMENT chiave opz. stringa Canale di distribuzione: sotto-dominio
+ENVIRONMENT key optional string Distribution channel: sub-domain
 ```
 ```
-PROCESS chiave opz. stringa Canale di distribuzione: processo
-NAME chiave stringa Nome dell'oggetto
+PROCESS key optional string Distribution channel: process
+NAME key string Object Name
 ```
 ```
-VERSION chiave intero Versione dell’oggetto
+VERSION key integer Object version
 ```
 ```
-CREATED data/ora Timestamp di pubblicazione
+CREATED data/time Timestamp of publication
 ```
 ```
-CREATED_BY stringa Identità dell’utente che pubblica
+CREATED_BY string Identity of the user who publishes
 ```
 ```
-SIGNED_BY opz. URL Identità del firmatario (se il contenuto è
-firmato digitalmente)
-SEAL stringa Hash del contenuto
-CONFIDENTIAL_FOR opz. URL Identità del destinatario (se il contenuto
-è criptato con una chiave pubblica)
-MESSAGE_REF URL Puntatore all’oggetto
+SIGNED_BY optional URL Identity of signer (if the content is
+digitally signed)
+SEAL string Hash of content
+CONFIDENTIAL_FOR optional URL Identity of the recipient (if the content
+is encrypted with a public key)
+MESSAGE_REF URL Object pointer
 ```
 ```
-MESSAGE_SIZE decimale Dimensione dell'oggetto (in MB)
+MESSAGE_SIZE decimal Object dimension (MB)
 ```
-Come si può vedere, il record presenta una chiave composita, i cui primi elementi (DOMAIN,
-ENVIRONMENT e PROCESS) individuano un canale di distribuzione - che può essere omesso - mentre
-gli ultimi (NAME e VERSION) rappresentano il nome logico dell’oggetto pubblicato e, qualora sia
-previsto, il suo numero progressivo di versione.
+As you can see, the record has a composite key, whose first elements (DOMAIN,
+ENVIRONMENT and PROCESS) identify a distribution channel - which can be omitted - while
+the last ones (NAME and VERSION) represent the logical name of the published object and, if any
+expected, its progressive version number.
 
-MESSAGE_REF è un URL che individua l’oggetto pubblicato nell’area comune di memorizzazione, e
-permette di scaricarne una copia; MESSAGE_SIZE ne indica la dimensione. Notare che l’area di
-memorizzazione non è parte di SMB, e deve quindi essere gestita dagli utenti (incluso il controllo
-degli accessi, quando previsto).
+MESSAGE_REF is a URL that identifies the object published in the common storage area, e
+allows you to download a copy; MESSAGE_SIZE indicates its size. Note that the area of
+storage is not part of SMB, and must therefore be managed by users (including control
+of accesses, when required).
 
-Il campo SEAL contiene un valore _hash_ calcolato sul contenuto dell’oggetto pubblicato: permette a
-chiunque abbia ricevuto l'oggetto di verificarne, applicando il medesimo algoritmo già utilizzato in
-fase di pubblicazione, la corrispondenza col contenuto originale.
+The SEAL field contains a _hash_ value calculated on the content of the published object: it allows a
+anyone who has received the object to verify it, applying the same algorithm already used in
+publication phase, correspondence with the original content.
 
-SIGNED_BY e CONFIDENTIAL_FOR dichiarano rispettivamente l’utente che ha firmato digitalmente
-l'oggetto e il suo destinatario confidenziale, se presenti. In entrambi i casi, l’URL individua un record,
-appartenente a una qualunque _public key infrastructure_ , che sancisce l’identità (e la relativa chiave
-pubblica) del soggetto in questione. Trattandosi di funzionalità avanzate, non sono descritte in
+SIGNED_BY and CONFIDENTIAL_FOR respectively declare the user who has digitally signed
+the object and its confidential recipient, if any. In both cases, the URL identifies a record,
+belonging to any _public key infrastructure_, which establishes the identity (and its key
+public) of the subject in question. As these are advanced features, they are not described in
+this document.
 
-questo documento.
+## Access and profiling
 
-## Accesso e profilatura
+For a user to take advantage of SMB, their identity must be registered in the system by the
+platform manager, who then issues personal credentials to be used
+for access.The credentials consist of a digital certificate that contains the user's identity e
+his profile. In the section on client installation, it will be explained how to configure the
+software with the credentials obtained from the manager. In this section, we give a brief explanation
+of the profiling mechanism.
 
-Perché un utente possa usufruire di SMB, la sua identità deve essere registrata nel sistema dal
-gestore della piattaforma, che provvede quindi a rilasciare delle credenziali personali da utilizzare
-per l’accesso. Le credenziali consistono in un certificato digitale che contiene l’identità dell’utente e
-il suo profilo. Nella sezione riguardante l’installazione del client, sarà spiegato come configurare il
-software con le credenziali ottenute dal gestore. In questa sezione, diamo una spiegazione sommaria
-del meccanismo di profilatura.
+The profile is determined by two elements: role and scope. The role can take the value "reader" or
+"writer". A user with the "reader" role can only perform read access, while the "writer" role
+it also enables write access - that is, it allows the publication of objects on SMB.The scope
+instead it defines individual operational limits based on the value of the DOMAIN fields,
+ENVIRONMENT, PROCESS and NAME. To take a simple example, a profile defined as
+"DOMAIN = 'domain ABC', ENVIRONMENT = 'ZXY environment'" limits the interested user to read /
+write SMB records with these characteristics.Individual profile fields can also contain a
+list of values, or be empty: in the second case, no operational limits are imposed.
 
-Il profilo è determinato da due elementi: ruolo e ambito. Il ruolo può assumere il valore “reader” o
-“writer”. Un utente con ruolo “reader” può solo eseguire accessi in lettura, mentre il ruolo “writer”
-abilita anche l’accesso in scrittura - cioè consente la pubblicazione di oggetti su SMB. L’ambito
-definisce invece dei limiti individuali di operatività basati sul valore dei campi DOMAIN,
-ENVIRONMENT, PROCESS e NAME. Per fare un esempio semplice, un profilo definito come
-“DOMAIN=’dominioABC’, ENVIRONMENT=’ambienteZXY’” limita l’utente interessato a leggere /
-scrivere record SMB con tali caratteristiche. I singoli campi del profilo possono anche contenere una
-lista di valori, oppure essere vuoti: nel secondo caso, non sono imposti limiti operativi.
+## Operations
 
-## Operazioni
+The center of the SMB application is a _smart contract_ Blockchain. For the convenience of users, this
+version of the application is distributed together with a _client_ that offers a simple interface
+interactive on the command line and makes the interaction with the Blockchain platform transparent, in
+particularly with regard to communication protocols and security. At the same time, the
+client integrates the basic functions for access, in reading and writing, to a common area of
+storage based on the Google Drive service.
+The combination of smart contract and client offers users three features:
 
-Il cuore dell’applicazione SMB è uno _smart contract_ Blockchain. Per comodità degli utenti, questa
-versione dell’applicazione è distribuita assieme a un _client_ che offre una semplice interfaccia
-interattiva a linea di comando e rende trasparente l’interazione con la piattaforma Blockchain, in
-particolare per quanto riguarda i protocolli di comunicazione e la sicurezza. Allo stesso tempo, il
-client integra le funzionalità di base per l’accesso, in lettura e scrittura, a un’area comune di
-memorizzazione basata sul servizio Google Drive.
-
-La combinazione di smart contract e client offre agli utenti tre funzionalità:
-
-- POST (solo utenti con ruolo “writer”): pubblica un nuovo oggetto, o una nuova versione di
-    un oggetto già pubblicato. Deve essere obbligatoriamente specificato il nome logico
-    dell’oggetto (NAME), e opzionalmente il canale (DOMAIN, ENVIRONMENT e PROCESS).
-    Inoltre, deve essere indicato il percorso sul disco locale di un file che rappresenta il
-    contenuto associare all’oggetto. L’operazione, se va a buon fine, effettua l’upload del
-    contenuto nell’area comune di memorizzazione. Se non esiste già un record con la stessa
-    combinazione di DOMAIN, ENVIRONMENT, PROCESS e NAME, al campo VERSION viene
-    assegnato il valore 0 (zero); diversamente, riceve il valore di VERSION del record precedente
-    incrementato di 1. Tutti i campi non inclusi nella chiave vengono valorizzati
-    automaticamente.
+- POST (only users with "writer" role): publish a new object, or a new version of
+    an object already published. The logical name must be specified
+    of the object (NAME), and optional the channel (DOMAIN, ENVIRONMENT e PROCESS).
+    Additionally, the local disk path to a file representing the
+    content associated with the object. If the operation is successful, upload the
+    contained in the common storage area. If there is not already a record with the same
+    combination of DOMAIN, ENVIRONMENT, PROCESS and NAME, the VERSION field comes
+    assigned the value 0 (zero); otherwise, it receives the VERSION value of the previous record
+    incremented by 1. All fields not included in the key are evaluated
+    automatically.
 
 
-- GET: recupera il contenuto di un oggetto, specificato attraverso la chiave. Se viene
-    specificato un numero di versione, il contenuto restituito corrisponde alla versione indicata;
-    diversamente, è quello dell’ultima versione pubblicata. L’operazione segnala un errore se
-    non è possibile accedere all’oggetto indicato, ovvero se il contenuto dell’oggetto è stato
-    alterato dopo la pubblicazione (check rispetto al campo SEAL).
-- VERSION: recupera il numero dell’ultima versione pubblicata di un oggetto, specificato
-    attraverso la chiave parziale (DOMAIN, ENVIRONMENT, PROCESS e NAME).
+- GET: retrieves the contents of an object, specified by the key. If he comes
+    specified a version number, the content returned matches the version indicated;
+    otherwise, it is that of the latest published version. The operation reports an error if
+    it is not possible to access the indicated object, or if the content of the object has been
+    altered after publication (check against the SEAL field).
+- VERSION:retrieves the number of the last published version of an object, specified
+    through the partial key (DOMAIN, ENVIRONMENT, PROCESS and NAME).
 
-## Installazione del client
+## Client installation
 
-**Requisiti di sistema**
+**System requirements**
 
-- Java JRE 1.8 o superiore
-- Connessione a Internet priva di proxy
+- Java JRE 1.8 or higher
+- Internet connection without proxy
 - Account Google Drive
 
-**Integrazione con Google Drive**
-In questa versione dell’applicazione, l'unico servizio supportato come area comune di
-memorizzazione è Google Drive. Durante il primo utilizzo, eseguendo una operazione di tipo POST,
-l’utente viene invitato ad accedere ad una pagina Web specifica per gestire il consenso all’utilizzo dei
-dati, necessario per usufruire del servizio. Una volta fornito il consenso, non sarà più richiesto in
-seguito.
+**Google Drive Integration**
+In this version of the application, the only service supported as a common area of
+storage is Google Drive. During the first use, by performing a POST operation,
+the user is invited to access a specific web page to manage the consent to the use of
+data, necessary to use the service. Once consent has been provided, it will no longer be required in
+following.
 
-**Installazione**
-Il client viene distribuito, su richiesta individuale, dal gestore della piattaforma. È costituito da due
-file: un JAR (eseguibile) contenente il software e uno ZIP (wallet) che incapsula l’intera
-configurazione, inclusi gli indirizzi di rete e le credenziali di accesso.
+**Installation**
+The client is distributed, on individual request, by the platform manager. It consists of two
+file: a JAR (executable) containing the software and a ZIP (wallet) that encapsulates the whole
+configuration, including network addresses and login credentials.
 
-L’eseguibile è uguale - a parità di versione del software - per tutti gli utenti. Trattandosi di un
-programma Java, può essere copiato dall’utente in qualunque cartella del proprio disco, da cui verrà
-quindi lanciato con il comando “java” (v. Uso del client).
+The executable is the same - with the same software version - for all users. Being a
+Java program, it can be copied by the user to any folder on your disk, from which it will come
+then launched with the “java” command (see Use of the client).
 
-Il wallet è invece strettamente personale. Il file ZIP deve essere decompresso dall’utente sul proprio
-disco – anche in questo caso, in una cartella a piacere – e il suo percorso passato come argomento
-del comando “java” (v. Uso del client). Se un utente riceve dal gestore più identità distinte
-(tipicamente, per accedere con profilature diverse), installerà un unico eseguibile e più wallet,
-decompressi ciascuno in una propria cartella; potrà quindi in fase di esecuzione specificare quale
-profilo utilizzare per eseguire l'operazione.
+The wallet, on the other hand, is strictly personal. The ZIP file must be unzipped by the user on his own
+disk - again, in a folder of your choice - and its path passed as an argument
+of the “java” command (see Using the client). If a user receives multiple distinct identities from the manager
+(typically, to access with different profiles), it will install a single executable and multiple wallets,
+unzipped each in its own folder; you can then specify which one during execution
+profile use to perform the operation.
 
 
-## Uso del client
+## Use of the client
 
-Il client non è interattivo: per eseguire una singola operazione, deve essere lanciato dalla shell di
+The client is not interactive: to perform a single operation, it must be launched from the
+system with a specific command. The command is structured as follows (it is assumed that the Java JRE has been
+configured correctly):
 
-sistema con un comando specifico. Il comando è così strutturato (si assume che il Java JRE sia stato
-configurato correttamente):
+_java - jar <path of file executable>_
 
-_java - jar <percorso del file eseguibile>_
+- w <path absolute of folder wallet> (mandatory)
+- o <operation: POST, GET o VERSION> (mandatory)
+- f <POST: absolute path of the file that represents the object to be published; GET absolute path of the file in which to copy the contents of the object to be recovered>_
+- d <argument DOMAIN> (optional)
+- e <argument ENVIRONMENT> (optional)
+- p <argument PROCESS> (optional)
+- n <argument NAME> (mandatory)
+- v <GET: argomento VERSION> (optional)_
 
-_- w <percorso assoluto della cartella wallet> (obbligatorio)
-- o <operazione: POST, GET o VERSION> (obbligatorio)
-- f <POST: percorso assoluto del file che rappresenta l’oggetto da pubblicare; GET percorso
-assoluto del file in cui copiare il contenuto dell’oggetto da recuperare>_
-    _- d <argomento DOMAIN> (opzionale)
-- e <argomento ENVIRONMENT> (opzionale)
-- p <argomento PROCESS> (opzionale)
-- n <argomento NAME> (obbligatorio)
-- v <GET: argomento VERSION> (opzionale)_
+At each execution, the related log (activity and any errors) is added to the end of the smb-
+ledger.log, located in the logs sub-folder.
 
-A ogni esecuzione, il relativo log (attività e eventuali errori) viene aggiunto in coda al file smb-
-ledger.log, posizionato nella sotto-cartella logs.
-
-**Esempi su PC Windows (argomenti obbligatori in grassetto)**
+**Examples for PC Windows (mandatory arguments in bold)**
 
 **_java -jar smb-ledger-1.0.0.jar - w C:\Users\mywindowsuser\smb\smbuser_**
 
@@ -186,5 +183,3 @@ _- d mydomain -e myenv -p myprocess
 **_- o VERSION_**
 _- d mydomain -e myenv -p myprocess_
 **_- n myobject_**
-
-
