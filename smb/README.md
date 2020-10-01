@@ -180,3 +180,18 @@ _- d mydomain -e myenv -p myprocess - v targetversion_
 **_- o VERSION_**
 _- d mydomain -e myenv -p myprocess_
 **_- n myobject_**
+
+
+## Chaincode
+
+### Installation
+
+#### Prerequisites
+
+* Linux Environment.
+* Administrative access to the machine.
+* Access to Internet.
+* Install **Hyperledger Fabric version 1.4** following this installation [guide](https://hyperledger-fabric.readthedocs.io/en/latest/write_first_app.html#).
+* Clone the repository.: `git clone https://github.com/Engineering-Research-and-Development/qu4lity-dapps.git`
+* Copy the `chaincode` folder of CHQ project under your HLF installation machine.
+* To install the chaincode follow the instructions given in the following guide: [guide](https://hyperledger-fabric.readthedocs.io/en/release-1.4/chaincode4noah.html#installing-chaincode#)
