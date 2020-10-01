@@ -151,12 +151,12 @@ _java - jar <path of file executable>_
 
 - w <path absolute of folder wallet> (mandatory)
 - o <operation: POST, GET o VERSION> (mandatory)
-- f <POST: absolute path of the file that represents the object to be published; GET absolute path of the file in which to copy the contents of the object to be recovered>_
+- f <POST: absolute path of the file that represents the object to be published; GET absolute path of the file in which to copy the contents of the object to be recovered>
 - d <argument DOMAIN> (optional)
 - e <argument ENVIRONMENT> (optional)
 - p <argument PROCESS> (optional)
 - n <argument NAME> (mandatory)
-- v <GET: argomento VERSION> (optional)_
+- v <GET: argomento VERSION> (optional)
 
 At each execution, the related log (activity and any errors) is added to the end of the smb-
 ledger.log, located in the logs sub-folder.
@@ -167,16 +167,13 @@ ledger.log, located in the logs sub-folder.
 
 **_- o POST_**
 _- d mydomain - e myenv - p myprocess_
-**_- n myobject
-- f C:\Users\mywindowsuser\Documents\mycontent-myversion.bin_**
+**_- n myobject - f C:\Users\mywindowsuser\Documents\mycontent-myversion.bin_**
 
 **_java -jar smb-ledger-1.0.0.jar -w C:\Users\mywindowsuser\smb\smbuser_**
 
 **_- o GET_**
-_- d mydomain -e myenv -p myprocess
-- v targetversion_
-**_- n myobject
-- f C:\Users\mywindowsuser\MyFolder\mycontent.bin_**
+_- d mydomain -e myenv -p myprocess - v targetversion_
+**_- n myobject - f C:\Users\mywindowsuser\MyFolder\mycontent.bin_**
 
 **_java -jar smb-ledger-1.0.0.jar - w C:\Users\mywindowsuser\smb\smbuser_**
 
